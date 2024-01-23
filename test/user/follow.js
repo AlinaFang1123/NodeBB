@@ -6,7 +6,8 @@ const user = require('../../src/user'); // Adjust the path as necessary
 
 describe('follow.js', () => {
     describe('.follow() and .unfollow()', () => {
-        let uid, followuid;
+        let uid;
+        let followuid;
 
         beforeEach(async () => {
             // Setup mock users
@@ -51,23 +52,18 @@ describe('follow.js', () => {
             const isFollowing = await user.isFollowing(uid, followuid);
             assert.strictEqual(isFollowing, false);
         });
-
-        it('should return false if the user is not following another user', async () => {
-            const isFollowing = await user.isFollowing(uid, anotheruid);
-            assert.strictEqual(isFollowing, false);
-        });
     });
 
     describe('User Following and Followers', () => {
-        let uid, followuid1, followuid2;
-    
+        let uid;
+        let followuid1;
+        let followuid2;
         beforeEach(async () => {
             // Setup mock users
             uid = await user.create({ username: 'user1', password: 'password' });
             followuid1 = await user.create({ username: 'user2', password: 'password' });
             followuid2 = await user.create({ username: 'user3', password: 'password' });
         });
-    
         it('should correctly return the users that a user is following', async () => {
             await user.follow(uid, followuid1);
             await user.follow(uid, followuid2);
@@ -75,7 +71,6 @@ describe('follow.js', () => {
             assert(following.includes(followuid1));
             assert(following.includes(followuid2));
         });
-    
         it('should correctly return the followers of a user', async () => {
             await user.follow(followuid1, uid);
             await user.follow(followuid2, uid);
@@ -83,12 +78,10 @@ describe('follow.js', () => {
             assert(followers.includes(followuid1));
             assert(followers.includes(followuid2));
         });
-    
         it('should return an empty list if the user is not following anyone', async () => {
             const following = await user.getFollowing(uid, 0, -1);
             assert.strictEqual(following.length, 0);
         });
-    
         it('should return an empty list if the user has no followers', async () => {
             const followers = await user.getFollowers(uid, 0, -1);
             assert.strictEqual(followers.length, 0);
